@@ -1,0 +1,36 @@
+# Site settings — edit these first.
+title: Jackson Hull
+tagline: CS & Physics @ UW–Madison · AI optimization · RL for robotics
+description: >-
+  Portfolio of Jackson Hull, a Computer Science and Physics undergraduate at the
+  University of Wisconsin–Madison interested in AI optimization research and
+  reinforcement learning for robotics.
+author: Jackson Hull
+
+# This repo is served as a GitHub Pages *project* site at
+# https://strawcabbage.github.io/Portfolio/. If you rename the repo to
+# strawcabbage.github.io (or add a custom domain), set baseurl to "".
+url: "https://strawcabbage.github.io"
+baseurl: "/Portfolio"
+
+# Contact links. Leave a value empty ("") to hide it.
+contact:
+  email: ""          # e.g. you@wisc.edu
+  github: Strawcabbage
+  linkedin: jackson-hull-132966278
+  resume: ""         # e.g. /assets/resume.pdf (commit the PDF to assets/)
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+plugins:
+  - jekyll-seo-tag
+
+permalink: /writing/:year/:title/
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

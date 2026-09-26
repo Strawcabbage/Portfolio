@@ -1,0 +1,90 @@
+# Featured projects, shown in this order on the home page.
+#
+# Fields:
+#   title, summary (one line), details (list of bullets), tags
+#   status:  optional, e.g. "In progress"
+#   repo:    source link (omit for private code)
+#   demo:    live demo link (optional)
+#   note:    small line shown instead of a source link (e.g. private repo)
+#   chart:   optional id of an inline chart (see assets/js/main.js)
+
+- title: Grokking on Modular Arithmetic
+  summary: >-
+    Reproduced the "grokking" phenomenon, where a network generalizes long
+    after it has memorized its training set, with a transformer written from
+    scratch in PyTorch.
+  details:
+    - Implemented multi-head causal self-attention, pre-norm blocks and a
+      tiny 2-layer transformer from nn.Linear up.
+    - Trained on (a + b) mod 97 with only 30% of all pairs, using AdamW with
+      weight decay 0.1 for 100k steps.
+    - Training accuracy hits 100% by step ~4k; validation accuracy sits near
+      chance until it jumps to ~100% around step 36–40k.
+  tags: [PyTorch, Transformers, Deep Learning Theory]
+  repo: https://github.com/Strawcabbage/grokking
+  chart: grokking
+
+- title: Transformer Engine
+  status: In progress
+  summary: >-
+    An autograd and inference runtime written from scratch in C++17, working
+    toward GPT-2 small inference.
+  details:
+    - Tensor library with object-oriented design and reverse-mode autograd,
+      with hand-derived backward passes for matmul, softmax, layer norm and
+      GELU, checked against finite-difference gradients under GoogleTest.
+    - Now adding SIMD matmul kernels and a KV cache for GPT-2 small
+      inference, validated against a PyTorch reference implementation.
+  tags: [C++17, SIMD, OpenMP, CMake, GoogleTest]
+  repo: https://github.com/Strawcabbage/transformer_engine
+
+- title: Ledgerly
+  summary: >-
+    A LangGraph agent that reviews a stock portfolio once a week, combining
+    quantitative metrics, news and public sentiment into a verdict for each
+    holding.
+  details:
+    - A fan-out graph runs one analysis subgraph per stock, then aggregates
+      the results at the portfolio level, with SQLite checkpointing.
+    - Includes an MCP server for brokerage data, plus an evaluation harness
+      that replays history against cached fixtures to check calibration.
+  tags: [Python, LangGraph, LLM Agents, MCP]
+  note: Private repository, code available on request
+
+- title: Major Quest
+  summary: >-
+    A college-to-career simulation game built with Ariav Hayempour, driven by
+    live U.S. Department of Education, O*NET and BLS data.
+  details:
+    - Players pick a real school and major, then play through branching
+      decision years with realistic federal loan and repayment mechanics.
+    - Six live API integrations, 826 career profiles and 99 automated
+      tests, with an AI-generated retrospective at the end of each game.
+  tags: [React, Vite, Tailwind, Public Data APIs]
+  repo: https://github.com/ariavhayempour/major_quest
+
+- title: BookReviews API
+  summary: >-
+    A containerized Spring Boot backend with 23 REST endpoints for book
+    reviews, reading lists and a points-based reward system, deployed on AWS.
+  details:
+    - Deployed to AWS Elastic Beanstalk on PostgreSQL RDS with
+      Flyway-managed schema migrations; benchmarked at 9.8 ms p50 and
+      30.5 ms p95 latency over 500 requests.
+    - Transactional writes make a review and the points it awards commit or
+      roll back as one unit, keeping balances consistent under concurrent
+      requests. Secured with OAuth2/OIDC login and JWTs.
+  tags: [Java, Spring Boot, PostgreSQL, Docker, AWS]
+  repo: https://github.com/Strawcabbage/BookReviews
+
+- title: Unix Shell
+  summary: >-
+    An interactive Unix shell written in C, built on fork, exec and file
+    descriptor plumbing.
+  details:
+    - Custom tokenizer and parser supporting multi-stage pipelines, I/O
+      redirection and built-ins (cd, help, history, exit).
+    - Background job control, with SIGINT and SIGCHLD handlers to manage
+      and reap child processes.
+  tags: [C, Linux, Systems Programming]
+  repo: https://github.com/Strawcabbage/c_shell

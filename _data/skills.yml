@@ -1,0 +1,8 @@
+- group: Languages
+  items: [C++, Rust, Go, Python, C, Java]
+- group: ML & Observability
+  items: [PyTorch, LangGraph, W&B Weave, Splunk, Claude Code]
+- group: Systems & Infrastructure
+  items: [Linux, TCP/IP, Docker, AWS, CI/CD, Git]
+- group: Backend & Data
+  items: [Apache Kafka, PostgreSQL, MongoDB, SQLite, Spring Boot, Databricks]
