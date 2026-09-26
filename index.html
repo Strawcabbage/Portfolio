@@ -2,15 +2,29 @@
 layout: default
 ---
 <section class="hero wrap">
-  <p class="eyebrow">Computer Science &amp; Physics · UW–Madison</p>
-  <h1>Hi, I'm Jackson Hull.</h1>
-  <p class="lede">
-    I'm a junior at the University of Wisconsin–Madison studying Computer Science and
-    Physics. I'm most interested in <strong>AI optimization research</strong> and
-    <strong>reinforcement learning for robotics</strong>, and I'm looking for research
-    and internship opportunities where I can keep learning.
-  </p>
-  {% include contact-links.html %}
+  <div class="hero-text">
+    <p class="eyebrow">Computer Science &amp; Physics · UW–Madison</p>
+    <h1>Hi, I'm Jackson Hull.</h1>
+    <p class="lede">
+      I'm a junior interested in <strong>AI optimization research</strong> and
+      <strong>reinforcement learning for robotics</strong>, looking for research and
+      internship opportunities where I can keep learning.
+    </p>
+    <p class="now"><span class="now-dot" aria-hidden="true"></span><span><b>Currently</b> researching LLM-generated scheduling policies at UW–Madison · Wisconsin AI Safety Initiative</span></p>
+    {% include contact-links.html %}
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <canvas id="landscape"></canvas>
+    <p class="hero-art-caption">momentum SGD on a toy loss surface</p>
+  </div>
+</section>
+
+<section class="wrap highlights" aria-label="Highlights">
+  <ul>
+    {% for h in site.data.highlights %}
+    <li><strong>{{ h.value }}</strong><span>{{ h.label }}</span></li>
+    {% endfor %}
+  </ul>
 </section>
 
 <section id="about" class="wrap section">
@@ -36,7 +50,7 @@ layout: default
   <h2>Projects</h2>
   <div class="projects">
     {% for project in site.data.projects %}
-      {% include project-card.html project=project %}
+      {% if forloop.first %}{% include project-card.html project=project wide=true %}{% else %}{% include project-card.html project=project %}{% endif %}
     {% endfor %}
   </div>
 </section>
@@ -63,19 +77,21 @@ layout: default
     {% assign label = e.kind %}
     {% for pair in kind_labels %}{% assign kv = pair | split: ":" %}{% if kv[0] == e.kind %}{% assign label = kv[1] %}{% endif %}{% endfor %}
     <li class="kind-{{ e.kind }}">
-      <div class="tl-meta">
-        <span class="kind">{{ label }}</span>
-        {% if e.when and e.when != "" %}<span class="when">{{ e.when }}</span>{% endif %}
-      </div>
-      <h3>{{ e.title }}</h3>
-      <p class="org">{{ e.org }}</p>
-      {% if e.detail %}<p class="tl-detail">{{ e.detail }}</p>{% endif %}
-      {% if e.stack or e.link %}
-      <div class="tl-foot">
-        {% if e.stack %}<ul class="tags" aria-label="Tools">{% for t in e.stack %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
-        {% if e.link %}<a class="tl-link" href="{{ e.link.url }}">{{ e.link.label }} →</a>{% endif %}
-      </div>
-      {% endif %}
+      <details{% if forloop.first %} open{% endif %}>
+        <summary>
+          <span class="tl-meta">
+            <span class="kind">{{ label }}</span>
+            {% if e.when and e.when != "" %}<span class="when">{{ e.when }}</span>{% endif %}
+          </span>
+          <span class="tl-title">{{ e.title }}</span>
+          <span class="org">{{ e.org }}</span>
+        </summary>
+        <div class="tl-body">
+          {% if e.detail %}<p class="tl-detail">{{ e.detail }}</p>{% endif %}
+          {% if e.stack %}<ul class="tags" aria-label="Tools">{% for t in e.stack %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+      </details>
+      {% if e.link %}<a class="tl-link" href="{{ e.link.url }}">{{ e.link.label }} →</a>{% endif %}
     </li>
     {% endfor %}
   </ol>
