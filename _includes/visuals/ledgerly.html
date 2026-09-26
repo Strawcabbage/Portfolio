@@ -1,0 +1,35 @@
+<svg class="viz" viewBox="0 0 420 200" role="img" aria-labelledby="lg-t">
+  <title id="lg-t">Ledgerly architecture: a Schwab MCP server supplies positions, which fan out to one analysis lane per holding with news and social-mention inputs and a verdict, then aggregate into a weekly report. The MCP server and the news and social inputs are built; the lanes, verdicts and report are planned.</title>
+  <defs>
+    <marker id="lg-a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="v-head" d="M0 0 8 4 0 8z"/></marker>
+  </defs>
+  <g class="v-edge">
+    <path d="M96 94 C110 94 108 35 122 35" marker-end="url(#lg-a)"/>
+    <path d="M96 94 L122 93" marker-end="url(#lg-a)"/>
+    <path d="M96 94 C110 94 108 151 122 151" marker-end="url(#lg-a)"/>
+    <path class="v-dash" d="M314 35 C326 35 322 94 332 94" marker-end="url(#lg-a)"/>
+    <path class="v-dash" d="M314 93 L332 94" marker-end="url(#lg-a)"/>
+    <path class="v-dash" d="M314 151 C326 151 322 94 332 94" marker-end="url(#lg-a)"/>
+  </g>
+  <rect class="v-node-accent" x="8" y="74" width="88" height="40" rx="8"/>
+  <text class="v-text v-text-strong" x="52" y="91" text-anchor="middle">Schwab MCP</text>
+  <text class="v-label" x="52" y="105" text-anchor="middle">positions</text>
+  {% assign lanes = "AAPL:18,MSFT:76,NVDA:134" | split: "," %}
+  {% for lane in lanes %}{% assign l = lane | split: ":" %}{% assign y = l[1] | plus: 0 %}
+  <rect class="v-node v-dash" x="124" y="{{ y }}" width="190" height="34" rx="8"/>
+  <text class="v-mono" x="132" y="{{ y | plus: 21 }}">{{ l[0] }}</text>
+  <rect class="v-chip" x="172" y="{{ y | plus: 8 }}" width="38" height="18" rx="4"/>
+  <text class="v-small" x="191" y="{{ y | plus: 21 }}" text-anchor="middle">news</text>
+  <rect class="v-chip" x="214" y="{{ y | plus: 8 }}" width="42" height="18" rx="4"/>
+  <text class="v-small" x="235" y="{{ y | plus: 21 }}" text-anchor="middle">social</text>
+  <rect class="v-chip v-dash" x="260" y="{{ y | plus: 8 }}" width="46" height="18" rx="4"/>
+  <text class="v-small" x="283" y="{{ y | plus: 21 }}" text-anchor="middle">verdict</text>
+  {% endfor %}
+  <rect class="v-node v-dash" x="334" y="74" width="80" height="40" rx="8"/>
+  <text class="v-text v-text-strong" x="374" y="91" text-anchor="middle">Weekly</text>
+  <text class="v-label" x="374" y="105" text-anchor="middle">report</text>
+  <g class="v-legend">
+    <line class="v-edge" x1="124" y1="188" x2="146" y2="188"/><text class="v-label" x="152" y="192">built</text>
+    <line class="v-edge v-dash" x1="196" y1="188" x2="218" y2="188"/><text class="v-label" x="224" y="192">planned</text>
+  </g>
+</svg>

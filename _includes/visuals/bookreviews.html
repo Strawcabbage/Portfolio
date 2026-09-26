@@ -1,0 +1,24 @@
+<svg class="viz" viewBox="0 0 420 160" role="img" aria-labelledby="br-t">
+  <title id="br-t">BookReviews architecture: a client calls 23 REST endpoints over HTTPS with a JWT on a Spring Boot service running on AWS Elastic Beanstalk, which writes transactionally to PostgreSQL on AWS RDS with Flyway migrations.</title>
+  <defs>
+    <marker id="br-a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="v-head" d="M0 0 8 4 0 8z"/></marker>
+  </defs>
+  <rect class="v-boundary" x="130" y="18" width="284" height="124" rx="10"/>
+  <text class="v-mono" x="142" y="36">AWS</text>
+  <rect class="v-node" x="8" y="60" width="72" height="40" rx="8"/>
+  <text class="v-text v-text-strong" x="44" y="84" text-anchor="middle">Client</text>
+  <g class="v-edge">
+    <line x1="80" y1="80" x2="148" y2="80" marker-end="url(#br-a)"/>
+    <line x1="274" y1="80" x2="318" y2="80" marker-end="url(#br-a)"/>
+  </g>
+  <text class="v-small" x="114" y="72" text-anchor="middle">HTTPS · JWT</text>
+  <rect class="v-node-accent" x="150" y="50" width="124" height="60" rx="8"/>
+  <text class="v-text v-text-strong" x="212" y="72" text-anchor="middle">Spring Boot</text>
+  <text class="v-label" x="212" y="87" text-anchor="middle">Elastic Beanstalk</text>
+  <text class="v-label" x="212" y="101" text-anchor="middle">23 endpoints · Docker</text>
+  <text class="v-small" x="296" y="72" text-anchor="middle">txn</text>
+  <rect class="v-node" x="320" y="60" width="84" height="40" rx="8"/>
+  <text class="v-text v-text-strong" x="362" y="78" text-anchor="middle">PostgreSQL</text>
+  <text class="v-label" x="362" y="92" text-anchor="middle">RDS</text>
+  <text class="v-small" x="362" y="124" text-anchor="middle">Flyway migrations</text>
+</svg>
