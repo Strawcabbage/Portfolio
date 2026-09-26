@@ -1,0 +1,8 @@
+- group: Languages
+  items: [Python, C++, Java, JavaScript, SQL]
+- group: ML & AI
+  items: [PyTorch, Transformers, LangGraph, LLM agents, MCP]
+- group: Robotics
+  items: [ROS 2, Simulation]
+- group: Software
+  items: [Spring Boot, React, PostgreSQL, Docker, Git]

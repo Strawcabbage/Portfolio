@@ -1,0 +1,7 @@
+{% assign c = site.contact %}
+<ul class="links">
+  {% if c.email != "" and c.email %}<li><a class="btn btn-primary" href="mailto:{{ c.email }}">Email me</a></li>{% endif %}
+  {% if c.github != "" and c.github %}<li><a class="btn" href="https://github.com/{{ c.github }}">GitHub</a></li>{% endif %}
+  {% if c.linkedin != "" and c.linkedin %}<li><a class="btn" href="https://www.linkedin.com/in/{{ c.linkedin }}">LinkedIn</a></li>{% endif %}
+  {% if c.resume != "" and c.resume %}<li><a class="btn" href="{{ c.resume | relative_url }}">Résumé (PDF)</a></li>{% endif %}
+</ul>

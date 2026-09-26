@@ -1,0 +1,75 @@
+# Featured projects, shown in this order on the home page.
+#
+# Fields:
+#   title, summary (one line), details (list of bullets), tags
+#   status:  optional, e.g. "In progress"
+#   repo:    source link (omit for private code)
+#   demo:    live demo link (optional)
+#   note:    small line shown instead of a source link (e.g. private repo)
+#   chart:   optional id of an inline chart (see assets/js/main.js)
+
+- title: Grokking on Modular Arithmetic
+  summary: >-
+    Reproduced the "grokking" phenomenon, where a network generalizes long
+    after it has memorized its training set, with a transformer written from
+    scratch in PyTorch.
+  details:
+    - Implemented multi-head causal self-attention, pre-norm blocks and a
+      tiny 2-layer transformer from nn.Linear up.
+    - Trained on (a + b) mod 97 with only 30% of all pairs, using AdamW with
+      weight decay 0.1 for 100k steps.
+    - Training accuracy hits 100% by step ~4k; validation accuracy sits near
+      chance until it jumps to ~100% around step 36–40k.
+  tags: [PyTorch, Transformers, Deep Learning Theory]
+  repo: https://github.com/Strawcabbage/grokking
+  chart: grokking
+
+- title: Transformer Engine
+  status: In progress
+  summary: >-
+    A transformer inference engine built from the ground up in C++, starting
+    with its own tensor library.
+  details:
+    - Strided tensor type (up to rank 4) with contiguity checks, stride
+      computation and flat-index ↔ coordinate mapping.
+    - Next up are the core kernels (matmul, softmax, layer norm), then
+      attention and a full forward pass.
+  tags: [C++, Systems, ML Infrastructure]
+  repo: https://github.com/Strawcabbage/transformer_engine
+
+- title: Ledgerly
+  summary: >-
+    A LangGraph agent that reviews a stock portfolio once a week, combining
+    quantitative metrics, news and public sentiment into a verdict for each
+    holding.
+  details:
+    - A fan-out graph runs one analysis subgraph per stock, then aggregates
+      the results at the portfolio level, with SQLite checkpointing.
+    - Includes an MCP server for brokerage data, plus an evaluation harness
+      that replays history against cached fixtures to check calibration.
+  tags: [Python, LangGraph, LLM Agents, MCP]
+  note: Private repository, code available on request
+
+- title: Major Quest
+  summary: >-
+    A college-to-career simulation game built with Ariav Hayempour, driven by
+    live U.S. Department of Education, O*NET and BLS data.
+  details:
+    - Players pick a real school and major, then play through branching
+      decision years with realistic federal loan and repayment mechanics.
+    - Six live API integrations, 826 career profiles and 99 automated
+      tests, with an AI-generated retrospective at the end of each game.
+  tags: [React, Vite, Tailwind, Public Data APIs]
+  repo: https://github.com/ariavhayempour/major_quest
+
+- title: BookReviews
+  summary: >-
+    A production-style REST API for book reviews and reading lists, built with
+    Spring Boot.
+  details:
+    - PostgreSQL with Flyway migrations, OAuth2/OIDC login and JWT-secured
+      endpoints, and admin tools for moderating reviews.
+    - Caffeine caching, Actuator health checks, Testcontainers integration
+      tests and Docker deployment.
+  tags: [Java, Spring Boot, PostgreSQL, Docker]
+  repo: https://github.com/Strawcabbage/BookReviews

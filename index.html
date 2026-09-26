@@ -1,0 +1,77 @@
+---
+layout: default
+---
+<section class="hero wrap">
+  <p class="eyebrow">Computer Science &amp; Physics · UW–Madison</p>
+  <h1>Hi, I'm Jackson Hull.</h1>
+  <p class="lede">
+    I'm a junior at the University of Wisconsin–Madison studying Computer Science and
+    Physics. I'm most interested in <strong>AI optimization research</strong> and
+    <strong>reinforcement learning for robotics</strong>, and I'm looking for research
+    and internship opportunities where I can keep learning.
+  </p>
+  {% include contact-links.html %}
+</section>
+
+<section id="about" class="wrap section">
+  <h2>About</h2>
+  <div class="prose">
+    <p>
+      I like to understand things by building them from first principles. That has
+      meant writing transformers by hand to reproduce results like grokking, and
+      building a C++ tensor library as the base for a transformer inference engine.
+      My physics background shapes how I think about optimization: loss landscapes,
+      training dynamics, and why models generalize when they do.
+    </p>
+    <p>
+      Outside of research I build full-stack and agentic software, from Spring Boot
+      APIs to LLM agents, and I work on robotics software with Wisconsin Robotics.
+    </p>
+  </div>
+</section>
+
+<section id="projects" class="wrap section">
+  <h2>Projects</h2>
+  <div class="projects">
+    {% for project in site.data.projects %}
+      {% include project-card.html project=project %}
+    {% endfor %}
+  </div>
+</section>
+
+<section id="experience" class="wrap section">
+  <h2>Education &amp; Experience</h2>
+  <ol class="timeline">
+    {% for e in site.data.experience %}
+    <li>
+      <div class="tl-head">
+        <h3>{{ e.title }}</h3>
+        {% if e.when != "" %}<span class="when">{{ e.when }}</span>{% endif %}
+      </div>
+      <p class="org">{{ e.org }}</p>
+      {% if e.detail %}<p>{{ e.detail }}</p>{% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section id="skills" class="wrap section">
+  <h2>Skills</h2>
+  <dl class="skills">
+    {% for s in site.data.skills %}
+    <div>
+      <dt>{{ s.group }}</dt>
+      <dd><ul class="tags">{% for i in s.items %}<li>{{ i }}</li>{% endfor %}</ul></dd>
+    </div>
+    {% endfor %}
+  </dl>
+</section>
+
+<section id="contact" class="wrap section contact">
+  <h2>Get in touch</h2>
+  <p class="prose">
+    I'm open to research positions, internships and collaborations in ML optimization
+    and robot learning. The best way to reach me is below.
+  </p>
+  {% include contact-links.html %}
+</section>

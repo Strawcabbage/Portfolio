@@ -1,0 +1,30 @@
+{% assign p = include.project %}
+<article class="project{% if p.chart %} project-wide{% endif %}">
+  <div class="project-body">
+    <header>
+      <h3>{{ p.title }}</h3>
+      {% if p.status %}<span class="status">{{ p.status }}</span>{% endif %}
+    </header>
+    <p class="summary">{{ p.summary }}</p>
+    {% if p.details %}
+    <ul class="details">
+      {% for d in p.details %}<li>{{ d }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    <ul class="tags" aria-label="Technologies">
+      {% for t in p.tags %}<li>{{ t }}</li>{% endfor %}
+    </ul>
+    <p class="project-links">
+      {% if p.demo %}<a href="{{ p.demo }}">Live demo →</a>{% endif %}
+      {% if p.repo %}<a href="{{ p.repo }}">Source →</a>{% endif %}
+      {% if p.note %}<span class="note">{{ p.note }}</span>{% endif %}
+    </p>
+  </div>
+  {% if p.chart %}
+  <figure class="project-figure">
+    <div class="chart" data-chart="{{ p.chart }}" role="img"
+         aria-label="Line chart of training and validation accuracy over 100,000 steps. Training accuracy reaches 100% by about step 4,000; validation accuracy stays low until it jumps to about 100% between steps 32,000 and 40,000."></div>
+    <figcaption>Accuracy vs. training step, (a + b) mod 97, 30% train split, d = 128. Hover to inspect.</figcaption>
+  </figure>
+  {% endif %}
+</article>
