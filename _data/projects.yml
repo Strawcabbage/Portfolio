@@ -27,14 +27,15 @@
 - title: Transformer Engine
   status: In progress
   summary: >-
-    A transformer inference engine built from the ground up in C++, starting
-    with its own tensor library.
+    An autograd and inference runtime written from scratch in C++17, working
+    toward GPT-2 small inference.
   details:
-    - Strided tensor type (up to rank 4) with contiguity checks, stride
-      computation and flat-index ↔ coordinate mapping.
-    - Next up are the core kernels (matmul, softmax, layer norm), then
-      attention and a full forward pass.
-  tags: [C++, Systems, ML Infrastructure]
+    - Tensor library with object-oriented design and reverse-mode autograd,
+      with hand-derived backward passes for matmul, softmax, layer norm and
+      GELU, checked against finite-difference gradients under GoogleTest.
+    - Now adding SIMD matmul kernels and a KV cache for GPT-2 small
+      inference, validated against a PyTorch reference implementation.
+  tags: [C++17, SIMD, OpenMP, CMake, GoogleTest]
   repo: https://github.com/Strawcabbage/transformer_engine
 
 - title: Ledgerly
@@ -62,14 +63,28 @@
   tags: [React, Vite, Tailwind, Public Data APIs]
   repo: https://github.com/ariavhayempour/major_quest
 
-- title: BookReviews
+- title: BookReviews API
   summary: >-
-    A production-style REST API for book reviews and reading lists, built with
-    Spring Boot.
+    A containerized Spring Boot backend with 23 REST endpoints for book
+    reviews, reading lists and a points-based reward system, deployed on AWS.
   details:
-    - PostgreSQL with Flyway migrations, OAuth2/OIDC login and JWT-secured
-      endpoints, and admin tools for moderating reviews.
-    - Caffeine caching, Actuator health checks, Testcontainers integration
-      tests and Docker deployment.
-  tags: [Java, Spring Boot, PostgreSQL, Docker]
+    - Deployed to AWS Elastic Beanstalk on PostgreSQL RDS with
+      Flyway-managed schema migrations; benchmarked at 9.8 ms p50 and
+      30.5 ms p95 latency over 500 requests.
+    - Transactional writes make a review and the points it awards commit or
+      roll back as one unit, keeping balances consistent under concurrent
+      requests. Secured with OAuth2/OIDC login and JWTs.
+  tags: [Java, Spring Boot, PostgreSQL, Docker, AWS]
   repo: https://github.com/Strawcabbage/BookReviews
+
+- title: Unix Shell
+  summary: >-
+    An interactive Unix shell written in C, built on fork, exec and file
+    descriptor plumbing.
+  details:
+    - Custom tokenizer and parser supporting multi-stage pipelines, I/O
+      redirection and built-ins (cd, help, history, exit).
+    - Background job control, with SIGINT and SIGCHLD handlers to manage
+      and reap child processes.
+  tags: [C, Linux, Systems Programming]
+  repo: https://github.com/Strawcabbage/c_shell
