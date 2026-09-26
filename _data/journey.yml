@@ -1,0 +1,78 @@
+# Journey timeline, newest first.
+#
+# Fields:
+#   title, org, when
+#   kind:   work | research | course | program | leadership (sets the label)
+#   detail: one or two sentences on what you did and what came of it
+#   stack:  optional list of tools
+#   link:   optional { url, label }
+
+- title: AI Engineer Intern
+  org: T-Mobile · IntentCX
+  when: May – Aug 2026
+  kind: work
+  detail: >-
+    Led the design of a CI/CD regression framework that catches voice-agent
+    regressions before they reach customers, projected to save $200K+ a year.
+    Built evals from live production calls, replayed through an LLM user
+    simulator and graded with deterministic checks plus a position-debiased
+    pairwise LLM judge.
+  stack: [Python, Databricks, MongoDB, Splunk, W&B Weave]
+
+- title: Undergraduate Research Assistant, Distributed Systems
+  org: UW–Madison · Prof. Tyler Caraza-Harter
+  when: Jan 2026 – Present
+  kind: research
+  detail: >-
+    Co-authoring a paper on LLM-generated scheduling policies. Built an agentic
+    coding harness that validates AI-generated code via simulation and
+    LLM-guided evolutionary search, reaching ~4 s adjusted latency across 16
+    machines, ~70% faster than Codex.
+  stack: [Python]
+
+- title: Technical AI Safety
+  org: BlueDot Impact
+  when: ""   # TODO: completion date, e.g. Spring 2026
+  kind: course
+  detail: >-
+    Completed BlueDot's Technical AI Safety course.
+  link:
+    url: https://bluedot.org/certification?id=recUtL1Nnq7pbgzYp
+    label: View certificate
+
+- title: Undergraduate Research Assistant, Data Infrastructure
+  org: Plourde Lab, UW–Madison
+  when: Sep 2025 – May 2026
+  kind: research
+  detail: >-
+    Owned a Kafka ingestion pipeline and SQLite storage layer end to end,
+    keeping ~1.5M events/day reliable across 18 channels for 6 months. Built
+    real-time monitoring with historical queries, opening a ~270M-event record
+    to the lab's researchers.
+  stack: [Python, Kafka, SQLite, Linux]
+
+- title: Quantum + Chips Program
+  org: University of Minnesota
+  when: Summer 2025
+  kind: program
+  detail: >-
+    One of 25 students selected nationwide for a quantum computing and chip
+    design program with NVIDIA, Google and Intel.
+
+- title: Industry Liaison
+  org: Wisconsin Robotics
+  when: ""   # TODO: dates, e.g. 2024 – Present
+  kind: leadership
+  detail: >-
+    Secured ~$30K in sponsorships, bringing on Mastermold and Oshkosh
+    Corporation as new sponsors and renewing Onshape and Protocase.
+
+- title: Software Engineering Intern
+  org: Paladin Cloud
+  when: Jun – Sep 2024
+  kind: work
+  detail: >-
+    Generated, reviewed and validated 10 AI-generated cloud security policy
+    test suites, then presented the results to engineering leadership, which
+    led to adoption in production workflows.
+  stack: [Java]

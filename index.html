@@ -24,8 +24,10 @@ layout: default
       training dynamics, and why models generalize when they do.
     </p>
     <p>
-      Outside of research I build full-stack and agentic software, from Spring Boot
-      APIs to LLM agents, and I work on robotics software with Wisconsin Robotics.
+      Right now I'm researching LLM-generated scheduling policies in distributed
+      systems at UW–Madison. This past summer I built evaluation infrastructure
+      for voice AI agents at T-Mobile. I'm also part of the Wisconsin AI Safety
+      Initiative and completed BlueDot's Technical AI Safety course.
     </p>
   </div>
 </section>
@@ -39,17 +41,41 @@ layout: default
   </div>
 </section>
 
-<section id="experience" class="wrap section">
-  <h2>Education &amp; Experience</h2>
+<section id="journey" class="wrap section">
+  <h2>Journey</h2>
+
+  {% for ed in site.data.education %}
+  <div class="edu">
+    <div class="tl-head">
+      <h3>{{ ed.degree }}</h3>
+      <span class="when">{{ ed.when }}</span>
+    </div>
+    <p class="org">{{ ed.school }}</p>
+    {% for h in ed.highlights %}<p class="edu-line">{{ h }}</p>{% endfor %}
+    {% if ed.coursework %}<p class="edu-line"><span class="edu-k">Coursework</span> {{ ed.coursework | join: " · " }}</p>{% endif %}
+    {% if ed.activities %}<p class="edu-line"><span class="edu-k">Activities</span> {{ ed.activities | join: " · " }}</p>{% endif %}
+  </div>
+  {% endfor %}
+
+  {% assign kind_labels = "work:Work|research:Research|course:Course|program:Program|leadership:Leadership" | split: "|" %}
   <ol class="timeline">
-    {% for e in site.data.experience %}
-    <li>
-      <div class="tl-head">
-        <h3>{{ e.title }}</h3>
-        {% if e.when != "" %}<span class="when">{{ e.when }}</span>{% endif %}
+    {% for e in site.data.journey %}
+    {% assign label = e.kind %}
+    {% for pair in kind_labels %}{% assign kv = pair | split: ":" %}{% if kv[0] == e.kind %}{% assign label = kv[1] %}{% endif %}{% endfor %}
+    <li class="kind-{{ e.kind }}">
+      <div class="tl-meta">
+        <span class="kind">{{ label }}</span>
+        {% if e.when and e.when != "" %}<span class="when">{{ e.when }}</span>{% endif %}
       </div>
+      <h3>{{ e.title }}</h3>
       <p class="org">{{ e.org }}</p>
-      {% if e.detail %}<p>{{ e.detail }}</p>{% endif %}
+      {% if e.detail %}<p class="tl-detail">{{ e.detail }}</p>{% endif %}
+      {% if e.stack or e.link %}
+      <div class="tl-foot">
+        {% if e.stack %}<ul class="tags" aria-label="Tools">{% for t in e.stack %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
+        {% if e.link %}<a class="tl-link" href="{{ e.link.url }}">{{ e.link.label }} →</a>{% endif %}
+      </div>
+      {% endif %}
     </li>
     {% endfor %}
   </ol>

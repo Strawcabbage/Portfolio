@@ -17,7 +17,7 @@ baseurl: "/Portfolio"
 contact:
   email: ""          # e.g. you@wisc.edu
   github: Strawcabbage
-  linkedin: ""       # your LinkedIn handle, e.g. jackson-hull
+  linkedin: jackson-hull-132966278
   resume: ""         # e.g. /assets/resume.pdf (commit the PDF to assets/)
 
 markdown: kramdown

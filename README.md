@@ -18,7 +18,8 @@ Most edits don't touch HTML:
 |------|-------|
 | Name, tagline, email, LinkedIn, résumé link | `_config.yml` |
 | Projects (order, text, links, tags) | `_data/projects.yml` |
-| Education & experience | `_data/experience.yml` |
+| Education card | `_data/education.yml` |
+| Journey timeline (jobs, research, courses, programs) | `_data/journey.yml` |
 | Skills | `_data/skills.yml` |
 | Intro / About text | `index.html` |
 | Colors & layout | `assets/css/main.css` |
