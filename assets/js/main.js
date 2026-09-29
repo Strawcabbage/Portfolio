@@ -160,10 +160,14 @@
     });
   });
 
-  // ---------- Hero: gradient descent on a toy loss surface ----------
+  // ---------- Hero: optimizers on a toy loss surface ----------
+  // Ambient momentum-SGD particles until someone clicks; then each click drops
+  // balls that descend with the selected optimizer (or all three to compare).
   var canvas = document.getElementById("landscape");
   if (canvas && canvas.getContext) {
     var ctx = canvas.getContext("2d");
+    var stage = canvas.parentNode;
+    var hero = canvas.closest(".hero-art");
     // Loss = bowl + three Gaussian wells + a little ripple (x, y in [-1, 1]).
     var wells = [
       { x: -0.45, y: -0.25, a: 0.95, s: 0.10 },
@@ -183,16 +187,42 @@
       return [(loss(x + h, y) - loss(x - h, y)) / (2 * h), (loss(x, y + h) - loss(x, y - h)) / (2 * h)];
     }
 
-    var W = 0, H = 0, dpr = 1, bg = null, colors = {}, particles = [], running = false, raf = 0;
+    // Optimizers share one interface: step(ball, grad) -> [dx, dy].
+    var OPT = {
+      sgd: { name: "SGD", color: "--opt-sgd", shape: "circle",
+        init: function () { return {}; },
+        step: function (b, g) { return [-0.003 * g[0], -0.003 * g[1]]; } },
+      momentum: { name: "Momentum", color: "--opt-momentum", shape: "square",
+        init: function () { return { vx: 0, vy: 0 }; },
+        step: function (b, g) {
+          var s = b.st; s.vx = 0.95 * s.vx - 0.003 * g[0]; s.vy = 0.95 * s.vy - 0.003 * g[1];
+          return [s.vx, s.vy];
+        } },
+      adam: { name: "Adam", color: "--opt-adam", shape: "diamond",
+        init: function () { return { m: [0, 0], v: [0, 0], t: 0 }; },
+        step: function (b, g) {
+          var s = b.st, lr = 0.01, b1 = 0.9, b2 = 0.999, out = [0, 0];
+          s.t++;
+          for (var k = 0; k < 2; k++) {
+            s.m[k] = b1 * s.m[k] + (1 - b1) * g[k];
+            s.v[k] = b2 * s.v[k] + (1 - b2) * g[k] * g[k];
+            var mh = s.m[k] / (1 - Math.pow(b1, s.t)), vh = s.v[k] / (1 - Math.pow(b2, s.t));
+            out[k] = -lr * mh / (Math.sqrt(vh) + 1e-8);
+          }
+          return out;
+        } }
+    };
+    var ORDER = ["sgd", "momentum", "adam"];
+
+    var W = 0, H = 0, dpr = 1, bg = null, colors = {}, running = false, raf = 0, visible = false;
+    var ambient = [], balls = [], mode = "compare", latest = {};
     function toPx(x, y) { return [(x + 1) / 2 * W, (1 - (y + 1) / 2) * H]; }
+    function toXY(px, py) { return [px / W * 2 - 1, 1 - py / H * 2]; }
     function readColors() {
       var cs = getComputedStyle(document.documentElement);
-      colors = {
-        accent: cs.getPropertyValue("--accent").trim(),
-        line: cs.getPropertyValue("--border-strong").trim(),
-        muted: cs.getPropertyValue("--muted").trim(),
-        surface: cs.getPropertyValue("--surface").trim()
-      };
+      function v(n) { return cs.getPropertyValue(n).trim(); }
+      colors = { accent: v("--accent"), line: v("--border-strong"), surface: v("--surface") };
+      ORDER.forEach(function (k) { colors[k] = v(OPT[k].color); });
     }
 
     // Contour lines via marching squares, cached to an offscreen canvas.
@@ -201,18 +231,17 @@
       bg.width = W * dpr; bg.height = H * dpr;
       var g = bg.getContext("2d");
       g.scale(dpr, dpr);
-      var nx = 72, ny = Math.round(72 * H / W), vals = [], lo = Infinity, hi = -Infinity;
-      for (var j = 0; j <= ny; j++) {
+      var nx = 72, ny = Math.round(72 * H / W), vals = [], lo = Infinity, hi = -Infinity, i, j;
+      for (j = 0; j <= ny; j++) {
         vals.push([]);
-        for (var i = 0; i <= nx; i++) {
-          var v = loss(i / nx * 2 - 1, 1 - j / ny * 2);
-          vals[j].push(v); lo = Math.min(lo, v); hi = Math.max(hi, v);
+        for (i = 0; i <= nx; i++) {
+          var q = loss(i / nx * 2 - 1, 1 - j / ny * 2);
+          vals[j].push(q); lo = Math.min(lo, q); hi = Math.max(hi, q);
         }
       }
       var levels = 16, cw = W / nx, ch = H / ny;
       for (var k = 1; k < levels; k++) {
-        var t = lo + (hi - lo) * Math.pow(k / levels, 1.6);
-        var depth = 1 - k / levels;
+        var t = lo + (hi - lo) * Math.pow(k / levels, 1.6), depth = 1 - k / levels;
         g.strokeStyle = depth > 0.6 ? colors.accent : colors.line;
         g.globalAlpha = depth > 0.6 ? 0.25 + 0.35 * (depth - 0.6) / 0.4 : 0.55;
         g.lineWidth = 1;
@@ -222,63 +251,127 @@
           var idx = (a > t) * 8 + (b > t) * 4 + (c > t) * 2 + (d > t);
           if (idx === 0 || idx === 15) continue;
           var x0 = i * cw, y0 = j * ch;
-          var top = [x0 + cw * (t - a) / (b - a), y0], right = [x0 + cw, y0 + ch * (t - b) / (c - b)];
-          var bottom = [x0 + cw * (t - d) / (c - d), y0 + ch], left = [x0, y0 + ch * (t - a) / (d - a)];
-          var segs = {
-            1: [left, bottom], 2: [bottom, right], 3: [left, right], 4: [top, right], 5: [left, top, bottom, right],
-            6: [top, bottom], 7: [left, top], 8: [left, top], 9: [top, bottom], 10: [left, bottom, top, right],
-            11: [top, right], 12: [left, right], 13: [bottom, right], 14: [left, bottom]
-          }[idx];
-          for (var s2 = 0; s2 < segs.length; s2 += 2) {
-            g.moveTo(segs[s2][0], segs[s2][1]); g.lineTo(segs[s2 + 1][0], segs[s2 + 1][1]);
-          }
+          var T = [x0 + cw * (t - a) / (b - a), y0], R = [x0 + cw, y0 + ch * (t - b) / (c - b)];
+          var B = [x0 + cw * (t - d) / (c - d), y0 + ch], L = [x0, y0 + ch * (t - a) / (d - a)];
+          var segs = { 1: [L, B], 2: [B, R], 3: [L, R], 4: [T, R], 5: [L, T, B, R], 6: [T, B], 7: [L, T],
+            8: [L, T], 9: [T, B], 10: [L, B, T, R], 11: [T, R], 12: [L, R], 13: [B, R], 14: [L, B] }[idx];
+          for (var n = 0; n < segs.length; n += 2) { g.moveTo(segs[n][0], segs[n][1]); g.lineTo(segs[n + 1][0], segs[n + 1][1]); }
         }
         g.stroke();
       }
       g.globalAlpha = 1;
     }
 
-    function spawn(p) {
+    // Ambient particles: momentum SGD from random rim points, respawning.
+    function spawnAmbient(p) {
       p = p || {};
       var ang = Math.random() * Math.PI * 2, r = 0.75 + Math.random() * 0.2;
       p.x = Math.cos(ang) * r; p.y = Math.sin(ang) * r;
-      p.vx = 0; p.vy = 0; p.trail = []; p.rest = 0; p.age = 0;
+      p.vx = 0; p.vy = 0; p.trail = []; p.rest = 0; p.age = 0; p.dead = false;
       return p;
     }
-    function stepParticle(p) {
-      var gr = grad(p.x, p.y), beta = 0.9, lr = 0.0035;
-      p.vx = beta * p.vx - lr * gr[0] + (Math.random() - 0.5) * 0.0006;
-      p.vy = beta * p.vy - lr * gr[1] + (Math.random() - 0.5) * 0.0006;
+    function stepAmbient(p) {
+      var gr = grad(p.x, p.y);
+      p.vx = 0.9 * p.vx - 0.0035 * gr[0] + (Math.random() - 0.5) * 0.0006;
+      p.vy = 0.9 * p.vy - 0.0035 * gr[1] + (Math.random() - 0.5) * 0.0006;
       p.x += p.vx; p.y += p.vy; p.age++;
       p.trail.push([p.x, p.y]);
       if (p.trail.length > 90) p.trail.shift();
       if (Math.hypot(p.vx, p.vy) < 0.0006) p.rest++;
-      if (p.rest > 90 || p.age > 1400 || Math.abs(p.x) > 1.2 || Math.abs(p.y) > 1.2) spawn(p);
+      if (p.rest > 90 || p.age > 1400 || Math.abs(p.x) > 1.2 || Math.abs(p.y) > 1.2) {
+        if (balls.length) { p.dead = true; p.trail.shift(); } else spawnAmbient(p);
+      }
+    }
+
+    // User balls.
+    function dropBalls(x, y) {
+      stage.classList.add("used");
+      var kinds = mode === "compare" ? ORDER : [mode];
+      kinds.forEach(function (k) {
+        var b = { kind: k, x: x, y: y, trail: [[x, y]], st: OPT[k].init(), steps: 0, rest: 0, done: false };
+        balls.push(b);
+        latest[k] = b;
+        if (reduceMotion) { while (!b.done) stepBall(b); }
+      });
+      if (balls.length > 24) balls.splice(0, balls.length - 24);
+      clearBtn.hidden = false;
+      renderReadout();
+      if (reduceMotion) draw(); else start();
+    }
+    function stepBall(b) {
+      if (b.done) return;
+      var d = OPT[b.kind].step(b, grad(b.x, b.y));
+      b.x += d[0]; b.y += d[1]; b.steps++;
+      b.trail.push([b.x, b.y]);
+      if (Math.hypot(d[0], d[1]) < 0.00015) b.rest++; else b.rest = 0;
+      if (b.rest > 30 || b.steps >= 3000 || Math.abs(b.x) > 1.5 || Math.abs(b.y) > 1.5) b.done = true;
+    }
+
+    function marker(k, x, y, r) {
+      var shape = OPT[k] ? OPT[k].shape : "circle";
+      ctx.beginPath();
+      if (shape === "square") ctx.rect(x - r, y - r, 2 * r, 2 * r);
+      else if (shape === "diamond") { r *= 1.25; ctx.moveTo(x, y - r); ctx.lineTo(x + r, y); ctx.lineTo(x, y + r); ctx.lineTo(x - r, y); ctx.closePath(); }
+      else ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    }
+    function trail(tr, color, alphaMax, fade) {
+      ctx.strokeStyle = color; ctx.lineWidth = 2;
+      for (var i = 1; i < tr.length; i++) {
+        var a = toPx(tr[i - 1][0], tr[i - 1][1]), b = toPx(tr[i][0], tr[i][1]);
+        ctx.globalAlpha = fade ? (i / tr.length) * alphaMax : alphaMax;
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      }
     }
     function draw() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
       if (bg) ctx.drawImage(bg, 0, 0, W, H);
-      ctx.lineCap = "round";
-      particles.forEach(function (p) {
-        var tr = p.trail;
-        for (var i = 1; i < tr.length; i++) {
-          var a = toPx(tr[i - 1][0], tr[i - 1][1]), b = toPx(tr[i][0], tr[i][1]);
-          ctx.globalAlpha = (i / tr.length) * 0.9;
-          ctx.strokeStyle = colors.accent; ctx.lineWidth = 2;
-          ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      ctx.lineCap = "round"; ctx.lineJoin = "round";
+      var faded = balls.length > 0;
+      ambient.forEach(function (p) {
+        if (p.trail.length < 2) return;
+        trail(p.trail, colors.accent, faded ? 0.35 : 0.9, true);
+        if (!p.dead) {
+          var q = toPx(p.x, p.y);
+          ctx.globalAlpha = faded ? 0.35 : 1;
+          ctx.fillStyle = colors.accent; ctx.strokeStyle = colors.surface; ctx.lineWidth = 2;
+          marker("ambient", q[0], q[1], 4);
         }
-        var q = toPx(p.x, p.y);
+      });
+      balls.forEach(function (b) {
+        trail(b.trail, colors[b.kind], 0.9, false);
+        var q = toPx(b.x, b.y), s = toPx(b.trail[0][0], b.trail[0][1]);
         ctx.globalAlpha = 1;
-        ctx.fillStyle = colors.accent; ctx.strokeStyle = colors.surface; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(q[0], q[1], 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = colors.surface; ctx.strokeStyle = colors[b.kind]; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(s[0], s[1], 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = colors[b.kind]; ctx.strokeStyle = colors.surface; ctx.lineWidth = 2;
+        marker(b.kind, q[0], q[1], 5);
       });
       ctx.globalAlpha = 1;
     }
+
+    var readout = hero.querySelector(".opt-readout"), tbody = readout.querySelector("tbody");
+    var lastReadout = "";
+    function renderReadout() {
+      var rows = ORDER.filter(function (k) { return latest[k]; }).map(function (k) {
+        var b = latest[k];
+        return '<tr><td><span class="opt-name"><i class="mk mk-' + k + '"></i>' + OPT[k].name + "</span></td><td>" +
+          b.steps.toLocaleString() + (b.done ? "" : "…") + "</td><td>" + loss(b.x, b.y).toFixed(3) + "</td></tr>";
+      }).join("");
+      if (rows !== lastReadout) { tbody.innerHTML = rows; lastReadout = rows; }
+      readout.hidden = !rows;
+    }
+
+    var frame = 0;
     function tick() {
-      for (var k = 0; k < 2; k++) particles.forEach(stepParticle);
+      var busy = false;
+      for (var k = 0; k < 2; k++) ambient.forEach(function (p) { if (p.dead) p.trail.shift(); else stepAmbient(p); });
+      balls.forEach(function (b) { for (var k = 0; k < 4; k++) stepBall(b); if (!b.done) busy = true; });
       draw();
-      if (running) raf = requestAnimationFrame(tick);
+      if (++frame % 6 === 0 || !busy) renderReadout();
+      var ambientLive = ambient.some(function (p) { return !p.dead || p.trail.length; });
+      if (running && (busy || ambientLive)) raf = requestAnimationFrame(tick); else running = false;
     }
     function setup() {
       var rect = canvas.getBoundingClientRect();
@@ -287,24 +380,49 @@
       W = rect.width; H = rect.height;
       canvas.width = W * dpr; canvas.height = H * dpr;
       readColors(); drawContours();
-      if (!particles.length) {
+      if (!ambient.length) {
         for (var i = 0; i < 9; i++) {
-          var p = spawn(); p.age = Math.floor(Math.random() * 300);
-          for (var k = 0; k < i * 25; k++) stepParticle(p);
-          particles.push(p);
+          var p = spawnAmbient(); p.age = Math.floor(Math.random() * 300);
+          for (var k = 0; k < i * 25; k++) stepAmbient(p);
+          ambient.push(p);
         }
-        if (reduceMotion) particles.forEach(function (p) { for (var k = 0; k < 120; k++) stepParticle(p); });
+        if (reduceMotion) ambient.forEach(function (p) { for (var k = 0; k < 120; k++) stepAmbient(p); });
       }
       draw();
     }
-    function start() { if (!running && !reduceMotion) { running = true; raf = requestAnimationFrame(tick); } }
+    function start() { if (!running && !reduceMotion && visible && !document.hidden) { running = true; raf = requestAnimationFrame(tick); } }
     function stop() { running = false; cancelAnimationFrame(raf); }
+
+    canvas.addEventListener("pointerdown", function (e) {
+      var r = canvas.getBoundingClientRect(), xy = toXY(e.clientX - r.left, e.clientY - r.top);
+      dropBalls(xy[0], xy[1]);
+    });
+    canvas.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      var ang = Math.random() * Math.PI * 2, rr = 0.6 + Math.random() * 0.3;
+      dropBalls(Math.cos(ang) * rr, Math.sin(ang) * rr);
+    });
+    var seg = hero.querySelectorAll(".opt-seg button");
+    seg.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        mode = btn.dataset.opt;
+        seg.forEach(function (o) { o.setAttribute("aria-checked", o === btn ? "true" : "false"); });
+      });
+    });
+    var clearBtn = hero.querySelector(".opt-clear");
+    clearBtn.addEventListener("click", function () {
+      balls = []; latest = {}; clearBtn.hidden = true; renderReadout();
+      stage.classList.remove("used");
+      ambient.forEach(function (p) { if (p.dead) spawnAmbient(p); });
+      if (reduceMotion) draw(); else start();
+    });
+
     setup();
-    var visible = false;
-    whenVisible(canvas, function (vis) { visible = vis; vis && !document.hidden ? start() : stop(); });
-    document.addEventListener("visibilitychange", function () { document.hidden ? stop() : visible && start(); });
+    whenVisible(canvas, function (vis) { visible = vis; vis ? start() : stop(); });
+    document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
     var rt;
     window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(setup, 150); });
-    document.addEventListener("themechange", function () { requestAnimationFrame(setup); });
+    document.addEventListener("themechange", function () { requestAnimationFrame(function () { setup(); if (!running) draw(); }); });
   }
 })();

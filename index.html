@@ -19,9 +19,27 @@ layout: default
     <p class="now"><span class="now-dot" aria-hidden="true"></span><span><b>Currently</b> researching LLM-generated scheduling policies at UW–Madison · Wisconsin AI Safety Initiative</span></p>
     {% include contact-links.html %}
   </div>
-  <div class="hero-art" aria-hidden="true">
-    <canvas id="landscape"></canvas>
-    <p class="hero-art-caption">momentum SGD on a toy loss surface</p>
+  <div class="hero-art">
+    <div class="opt-stage">
+      <canvas id="landscape" tabindex="0" role="img"
+        aria-label="Interactive loss surface. Click or press Enter to drop balls; each one descends using the selected optimizer."></canvas>
+      <p class="opt-hint" aria-hidden="true">click to drop a ball</p>
+      <button type="button" class="opt-clear" hidden>Clear</button>
+    </div>
+    <div class="opt-controls">
+      <div class="opt-seg" role="radiogroup" aria-label="Optimizer">
+        <button type="button" role="radio" aria-checked="true" data-opt="compare">Compare</button>
+        <button type="button" role="radio" aria-checked="false" data-opt="sgd"><i class="mk mk-sgd"></i>SGD</button>
+        <button type="button" role="radio" aria-checked="false" data-opt="momentum"><i class="mk mk-momentum"></i>Momentum</button>
+        <button type="button" role="radio" aria-checked="false" data-opt="adam"><i class="mk mk-adam"></i>Adam</button>
+      </div>
+    </div>
+    <table class="opt-readout" hidden>
+      <caption class="sr-only">Latest run by optimizer</caption>
+      <thead><tr><th scope="col">Optimizer</th><th scope="col">Steps</th><th scope="col">Loss</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="hero-art-caption">lr 0.003 · momentum β 0.95 · Adam lr 0.01</p>
   </div>
 </section>
 
