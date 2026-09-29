@@ -80,7 +80,7 @@
     '<button type="button" class="tty-x" aria-label="Close terminal">×</button></div>' +
     '<div class="tty-out" aria-live="polite"></div>' +
     '<form class="tty-line"><label class="tty-prompt" for="tty-in"></label>' +
-    '<input id="tty-in" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send"></form>' +
+    '<input id="tty-in" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="send" inputmode="text"></form>' +
     "</div>";
   document.body.appendChild(root);
   var out = root.querySelector(".tty-out"), form = root.querySelector("form"), input = root.querySelector("input");
@@ -245,7 +245,7 @@
       greeted = true;
       print(["jsh 1.0 — a tiny cousin of my C shell (github.com/Strawcabbage/c_shell)", "type `help` to see what it can do.", ""]);
     }
-    setTimeout(function () { input.focus(); }, 0);
+    input.focus();
   }
   function close() {
     if (root.hidden) return;

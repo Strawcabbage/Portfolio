@@ -4,17 +4,25 @@ title: Writing
 permalink: /writing/
 sitemap: false   # remove once the first post is published
 ---
-<section class="wrap section">
+<section class="wrap section writing">
   <h1>Writing</h1>
+  <p class="lede">Notes from experiments, projects and things I'm learning.</p>
   {% if site.posts.size > 0 %}
-  <ul class="post-list">
+  <ol class="post-list">
     {% for post in site.posts %}
+    {% assign words = post.content | strip_html | number_of_words %}
+    {% assign minutes = words | divided_by: 220 | at_least: 1 %}
     <li>
-      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
-      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      <p class="post-meta">
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+        <span aria-hidden="true">·</span> <span>{{ minutes }} min read</span>
+      </p>
+      <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+      {% if post.summary %}<p class="post-summary">{{ post.summary }}</p>{% endif %}
+      {% if post.tags.size > 0 %}<ul class="tags" aria-label="Tags">{% for t in post.tags %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
     </li>
     {% endfor %}
-  </ul>
+  </ol>
   {% else %}
   <p class="prose">Nothing here yet.</p>
   {% endif %}

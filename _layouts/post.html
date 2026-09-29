@@ -1,11 +1,32 @@
 ---
 layout: default
 ---
-<article class="wrap section post">
-  <p class="eyebrow"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time></p>
-  <h1>{{ page.title }}</h1>
-  <div class="prose">
+{% assign words = content | strip_html | number_of_words %}
+{% assign minutes = words | divided_by: 220 | at_least: 1 %}
+<article class="wrap post">
+  <p class="case-back"><a href="{{ '/writing/' | relative_url }}">← All writing</a></p>
+  <header class="post-head">
+    <p class="post-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+      <span aria-hidden="true">·</span> <span>{{ minutes }} min read</span>
+    </p>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+    {% if page.tags.size > 0 %}
+    <ul class="tags" aria-label="Tags">{% for t in page.tags %}<li>{{ t }}</li>{% endfor %}</ul>
+    {% endif %}
+  </header>
+  <div class="prose post-body">
     {{ content }}
   </div>
-  <p><a href="{{ '/writing/' | relative_url }}">← All writing</a></p>
+  <footer class="post-foot">
+    <p>Thanks for reading. Questions or corrections? <a href="mailto:{{ site.contact.email }}?subject={{ page.title | url_encode }}">Email me</a>.</p>
+    <p><a href="{{ '/writing/' | relative_url }}">← All writing</a></p>
+  </footer>
 </article>
+{% if page.math %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.querySelector('.post-body'), {delimiters: [{left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}], throwOnError: false});"></script>
+{% endif %}

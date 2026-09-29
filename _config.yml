@@ -44,6 +44,11 @@ defaults:
       path: ""
     values:
       image: /assets/img/og-card.jpg
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
 social:
   name: Jackson Hull
   links:
