@@ -3,7 +3,13 @@ layout: default
 ---
 <section class="hero wrap">
   <div class="hero-text">
-    <p class="eyebrow">Computer Science &amp; Physics · UW–Madison</p>
+    <div class="hero-id">
+      <picture>
+        <source srcset="{{ '/assets/img/headshot.webp' | relative_url }}" type="image/webp">
+        <img class="avatar" src="{{ '/assets/img/headshot.jpg' | relative_url }}" alt="Headshot of Jackson Hull" width="88" height="88">
+      </picture>
+      <p class="eyebrow">Computer Science &amp; Physics<br>UW–Madison · Class of 2028</p>
+    </div>
     <h1>Hi, I'm Jackson Hull.</h1>
     <p class="lede">
       I'm a junior interested in <strong>AI optimization research</strong> and
