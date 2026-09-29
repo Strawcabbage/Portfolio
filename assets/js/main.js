@@ -418,6 +418,12 @@
       if (reduceMotion) draw(); else start();
     });
 
+    // The hidden terminal's `sgd` command releases all three from a random rim point.
+    document.addEventListener("portfolio:drop", function () {
+      var prev = mode, ang = Math.random() * Math.PI * 2, rr = 0.65 + Math.random() * 0.25;
+      mode = "compare"; dropBalls(Math.cos(ang) * rr, Math.sin(ang) * rr); mode = prev;
+    });
+
     setup();
     whenVisible(canvas, function (vis) { visible = vis; vis ? start() : stop(); });
     document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
