@@ -98,7 +98,7 @@ nav a {
   padding: 6px 8px; border-radius: 6px;
 }
 nav a:hover { color: var(--text); background: var(--surface-2); }
-@media (max-width: 520px) { nav a[href$="#journey"] { display: none; } }
+@media (max-width: 520px) { nav a[href$="#journey"], nav a[href$="#research"] { display: none; } }
 .theme-toggle {
   display: grid; place-items: center; width: 34px; height: 34px; margin-left: 4px;
   border: 1px solid var(--border); border-radius: 8px;
@@ -163,6 +163,24 @@ nav a:hover { color: var(--text); background: var(--surface-2); }
 .section > h2 { margin-bottom: 1.5rem; }
 .prose { color: var(--text-2); max-width: 68ch; }
 .prose p { margin: 0 0 1em; }
+
+/* ---------- Research ---------- */
+.research { display: grid; gap: 28px; }
+@media (min-width: 860px) { .research { grid-template-columns: 1.5fr 1fr; gap: 40px; } }
+.paper { border-left: 3px solid var(--accent); padding: 2px 0 2px 20px; }
+.paper + .paper { margin-top: 28px; }
+.paper-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 8px; }
+.paper h3 { font-size: 1.2rem; margin: 0 0 4px; }
+.paper h3 a { color: var(--text); }
+.paper-authors { margin: 0 0 10px; color: var(--accent-ink); font-weight: 500; font-size: .95rem; }
+.paper-summary { margin: 0 0 10px; color: var(--text-2); max-width: 62ch; }
+.paper-highlight { margin: 0; color: var(--text-2); font-size: .92rem; max-width: 62ch; padding: 10px 14px; background: var(--surface-2); border-radius: 8px; }
+.interests-h { font-size: .78rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; margin: 4px 0 12px; }
+.interests ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.interests li { display: grid; gap: 2px; padding-left: 14px; position: relative; }
+.interests li::before { content: ""; position: absolute; left: 0; top: .55em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.interests strong { font-weight: 600; }
+.interests span { color: var(--text-2); font-size: .9rem; }
 
 /* ---------- Projects ---------- */
 .projects { display: grid; gap: 20px; grid-template-columns: 1fr; }

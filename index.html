@@ -52,6 +52,31 @@ layout: default
   </div>
 </section>
 
+<section id="research" class="wrap section">
+  <h2>Research</h2>
+  <div class="research">
+    <div class="papers">
+      {% for r in site.data.research.papers %}
+      <article class="paper">
+        <p class="paper-meta"><span class="status">{{ r.status }}</span><span class="when">{{ r.venue }}</span></p>
+        <h3>{% if r.link != "" and r.link %}<a href="{{ r.link }}">{{ r.title }}</a>{% else %}{{ r.title }}{% endif %}</h3>
+        <p class="paper-authors">{{ r.authors }}</p>
+        <p class="paper-summary">{{ r.summary }}</p>
+        {% if r.highlight %}<p class="paper-highlight">{{ r.highlight }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    <div class="interests">
+      <h3 class="interests-h">Interests</h3>
+      <ul>
+        {% for i in site.data.research.interests %}
+        <li><strong>{{ i.title }}</strong><span>{{ i.detail }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section id="projects" class="wrap section">
   <h2>Projects</h2>
   <div class="projects">

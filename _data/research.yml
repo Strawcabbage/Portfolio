@@ -1,0 +1,25 @@
+# Research section. Update `status` and add `link` once the paper is public.
+papers:
+  - title: LLM-generated scheduling policies   # working title; replace with the paper's title
+    status: In preparation
+    authors: Co-authored with Prof. Tyler Caraza-Harter
+    venue: Distributed Systems, UW–Madison
+    summary: >-
+      Whether LLMs should generate decision-making code for scheduling or make the
+      decisions directly, along with estimator co-design and robustness to estimation
+      error.
+    highlight: >-
+      Built the agentic coding harness behind it, which validates AI-generated policies
+      in simulation and refines them with LLM-guided evolutionary search. It reaches
+      ~4 s adjusted latency on 16 machines, ~70% faster than Codex.
+    link: ""   # e.g. arXiv URL once released
+
+interests:
+  - title: Optimization & training dynamics
+    detail: Why and when networks generalize (grokking, weight decay, loss-landscape geometry).
+  - title: Reinforcement learning for robotics
+    detail: Learning control policies that transfer from simulation to real robots.
+  - title: LLM agents & evaluation
+    detail: Code-generating agents, evolutionary search, and evals that hold up in production.
+  - title: AI safety
+    detail: Wisconsin AI Safety Initiative; BlueDot Technical AI Safety.
