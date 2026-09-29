@@ -81,7 +81,11 @@ body {
   color: var(--text);
   font: 16px/1.6 var(--font);
   -webkit-font-smoothing: antialiased;
+  /* JetBrains Mono merges sequences like "../" and "->" into ligature glyphs,
+     which misrepresents typed paths and code; turn contextual ligatures off. */
+  font-variant-ligatures: no-contextual;
 }
+code, pre, kbd, .term, .tty-win { font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; }
 a { color: var(--accent-ink); text-underline-offset: 3px; }
 a:hover { color: var(--accent); }
 h1, h2, h3 { line-height: 1.2; letter-spacing: -0.015em; }
