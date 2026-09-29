@@ -27,6 +27,19 @@ kramdown:
 plugins:
   - jekyll-seo-tag
 
+# Social preview card (Open Graph / Twitter) used for every page unless a page
+# sets its own `image:` in front matter.
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/img/og-card.jpg
+social:
+  name: Jackson Hull
+  links:
+    - https://github.com/Strawcabbage
+    - https://www.linkedin.com/in/jackson-hull-132966278
+
 permalink: /writing/:year/:title/
 
 exclude:
