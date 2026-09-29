@@ -8,7 +8,8 @@
   --border-strong: #cfccc4;
   --text: #0b0b0b;
   --text-2: #52514e;
-  --muted: #76746f;
+  --muted: #6f6d68;
+  --btn: #2470cc;
   --accent: #2a78d6;
   --accent-ink: #1f5fae;
   --accent-soft: #e8f1fc;
@@ -31,6 +32,7 @@
     --text: #ffffff;
     --text-2: #c3c2b7;
     --muted: #9a998f;
+    --btn: #2a6fc4;
     --accent: #3987e5;
     --accent-ink: #7fb2f0;
     --accent-soft: #1b2a3d;
@@ -50,6 +52,7 @@
   --text: #ffffff;
   --text-2: #c3c2b7;
   --muted: #9a998f;
+  --btn: #2a6fc4;
   --accent: #3987e5;
   --accent-ink: #7fb2f0;
   --accent-soft: #1b2a3d;
@@ -155,7 +158,7 @@ nav a:hover { color: var(--text); background: var(--surface-2); }
   color: var(--text); text-decoration: none; font-weight: 500; font-size: .95rem;
 }
 .btn:hover { border-color: var(--accent); color: var(--text); }
-.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary { background: var(--btn); border-color: var(--btn); color: #fff; }
 .btn-primary:hover { color: #fff; filter: brightness(1.08); }
 
 /* ---------- Sections ---------- */
