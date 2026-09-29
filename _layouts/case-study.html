@@ -1,0 +1,29 @@
+---
+layout: default
+---
+<article class="wrap case">
+  <p class="case-back"><a href="{{ '/#projects' | relative_url }}">← Back to projects</a></p>
+  <header class="case-head">
+    <p class="eyebrow">Case study{% if page.status %} · {{ page.status }}{% endif %}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+    {% if page.facts %}
+    <dl class="case-facts">
+      {% for f in page.facts %}
+      <div><dt>{{ f.label }}</dt><dd>{{ f.value }}</dd></div>
+      {% endfor %}
+    </dl>
+    {% endif %}
+    {% if page.links %}
+    <p class="project-links">
+      {% for l in page.links %}<a href="{{ l.url }}">{{ l.label }} →</a>{% endfor %}
+    </p>
+    {% endif %}
+  </header>
+  {% if page.visual %}
+  <figure class="case-figure">{% include visuals/{{ page.visual }}.html %}</figure>
+  {% endif %}
+  <div class="prose case-body">
+    {{ content }}
+  </div>
+</article>

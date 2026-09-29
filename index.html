@@ -122,6 +122,8 @@ layout: default
           {% if e.stack %}<ul class="tags" aria-label="Tools">{% for t in e.stack %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
         </div>
       </details>
+      {% assign cs = site.case_studies | where: "journey", e.title | first %}
+      {% if cs %}<a class="tl-link" href="{{ cs.url | relative_url }}">Case study →</a>{% endif %}
       {% if e.link %}<a class="tl-link" href="{{ e.link.url }}">{{ e.link.label }} →</a>{% endif %}
     </li>
     {% endfor %}

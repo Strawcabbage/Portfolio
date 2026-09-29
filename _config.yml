@@ -27,6 +27,15 @@ kramdown:
 plugins:
   - jekyll-seo-tag
 
+# Case studies live in _case_studies/. Each starts with `published: false`;
+# flip it to true when the write-up is done and a "Case study" link appears on
+# the matching project card or Journey entry. Preview drafts locally with
+#   bundle exec jekyll serve --unpublished
+collections:
+  case_studies:
+    output: true
+    permalink: /case-studies/:name/
+
 # Social preview card (Open Graph / Twitter) used for every page unless a page
 # sets its own `image:` in front matter.
 defaults:
