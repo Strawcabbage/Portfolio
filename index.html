@@ -3,7 +3,13 @@ layout: default
 ---
 <section class="hero wrap">
   <div class="hero-text">
-    <p class="eyebrow">Computer Science &amp; Physics · UW–Madison</p>
+    <div class="hero-id">
+      <picture>
+        <source srcset="{{ '/assets/img/headshot.webp' | relative_url }}" type="image/webp">
+        <img class="avatar" src="{{ '/assets/img/headshot.jpg' | relative_url }}" alt="Headshot of Jackson Hull" width="88" height="88">
+      </picture>
+      <p class="eyebrow">Computer Science &amp; Physics<br>UW–Madison · Class of 2028</p>
+    </div>
     <h1>Hi, I'm Jackson Hull.</h1>
     <p class="lede">
       I'm a junior interested in <strong>AI optimization research</strong> and
@@ -13,9 +19,27 @@ layout: default
     <p class="now"><span class="now-dot" aria-hidden="true"></span><span><b>Currently</b> researching LLM-generated scheduling policies at UW–Madison · Wisconsin AI Safety Initiative</span></p>
     {% include contact-links.html %}
   </div>
-  <div class="hero-art" aria-hidden="true">
-    <canvas id="landscape"></canvas>
-    <p class="hero-art-caption">momentum SGD on a toy loss surface</p>
+  <div class="hero-art">
+    <div class="opt-stage">
+      <canvas id="landscape" tabindex="0" role="img"
+        aria-label="Interactive loss surface. Click or press Enter to drop balls; each one descends using the selected optimizer."></canvas>
+      <p class="opt-hint" aria-hidden="true">click to drop a ball</p>
+      <button type="button" class="opt-clear" hidden>Clear</button>
+    </div>
+    <div class="opt-controls">
+      <div class="opt-seg" role="radiogroup" aria-label="Optimizer">
+        <button type="button" role="radio" aria-checked="true" data-opt="compare">Compare</button>
+        <button type="button" role="radio" aria-checked="false" data-opt="sgd"><i class="mk mk-sgd"></i>SGD</button>
+        <button type="button" role="radio" aria-checked="false" data-opt="momentum"><i class="mk mk-momentum"></i>Momentum</button>
+        <button type="button" role="radio" aria-checked="false" data-opt="adam"><i class="mk mk-adam"></i>Adam</button>
+      </div>
+    </div>
+    <table class="opt-readout" hidden>
+      <caption class="sr-only">Latest run by optimizer</caption>
+      <thead><tr><th scope="col">Optimizer</th><th scope="col">Steps</th><th scope="col">Loss</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="hero-art-caption">lr 0.003 · momentum β 0.95 · Adam lr 0.01</p>
   </div>
 </section>
 
@@ -43,6 +67,31 @@ layout: default
       for voice AI agents at T-Mobile. I'm also part of the Wisconsin AI Safety
       Initiative and completed BlueDot's Technical AI Safety course.
     </p>
+  </div>
+</section>
+
+<section id="research" class="wrap section">
+  <h2>Research</h2>
+  <div class="research">
+    <div class="papers">
+      {% for r in site.data.research.papers %}
+      <article class="paper">
+        <p class="paper-meta"><span class="status">{{ r.status }}</span><span class="when">{{ r.venue }}</span></p>
+        <h3>{% if r.link != "" and r.link %}<a href="{{ r.link }}">{{ r.title }}</a>{% else %}{{ r.title }}{% endif %}</h3>
+        <p class="paper-authors">{{ r.authors }}</p>
+        <p class="paper-summary">{{ r.summary }}</p>
+        {% if r.highlight %}<p class="paper-highlight">{{ r.highlight }}</p>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    <div class="interests">
+      <h3 class="interests-h">Interests</h3>
+      <ul>
+        {% for i in site.data.research.interests %}
+        <li><strong>{{ i.title }}</strong><span>{{ i.detail }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -91,6 +140,8 @@ layout: default
           {% if e.stack %}<ul class="tags" aria-label="Tools">{% for t in e.stack %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
         </div>
       </details>
+      {% assign cs = site.case_studies | where: "journey", e.title | first %}
+      {% if cs %}<a class="tl-link" href="{{ cs.url | relative_url }}">Case study →</a>{% endif %}
       {% if e.link %}<a class="tl-link" href="{{ e.link.url }}">{{ e.link.label }} →</a>{% endif %}
     </li>
     {% endfor %}
@@ -113,7 +164,8 @@ layout: default
   <h2>Get in touch</h2>
   <p class="prose">
     I'm open to research positions, internships and collaborations in ML optimization
-    and robot learning. The best way to reach me is below.
+    and robot learning. The best way to reach me is email:
+    <a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a>.
   </p>
   {% include contact-links.html %}
 </section>

@@ -1,0 +1,27 @@
+<script type="application/json" id="term-data">
+{
+  "base": {{ site.baseurl | jsonify }},
+  "name": {{ site.author | jsonify }},
+  "tagline": {{ site.tagline | jsonify }},
+  "contact": {
+    "email": {{ site.contact.email | jsonify }},
+    "github": {{ site.contact.github | jsonify }},
+    "linkedin": {{ site.contact.linkedin | jsonify }},
+    "resume": {{ site.contact.resume | relative_url | jsonify }}
+  },
+  "projects": [{% for p in site.data.projects %}
+    { "slug": {{ p.title | slugify | jsonify }}, "title": {{ p.title | jsonify }}, "summary": {{ p.summary | jsonify }},
+      "status": {{ p.status | default: "" | jsonify }}, "repo": {{ p.repo | default: "" | jsonify }},
+      "tags": {{ p.tags | jsonify }} }{% unless forloop.last %},{% endunless %}{% endfor %}
+  ],
+  "journey": [{% for e in site.data.journey %}
+    { "title": {{ e.title | jsonify }}, "org": {{ e.org | jsonify }}, "when": {{ e.when | default: "" | jsonify }} }{% unless forloop.last %},{% endunless %}{% endfor %}
+  ],
+  "research": [{% for r in site.data.research.papers %}
+    { "title": {{ r.title | jsonify }}, "status": {{ r.status | jsonify }}, "authors": {{ r.authors | jsonify }} }{% unless forloop.last %},{% endunless %}{% endfor %}
+  ],
+  "skills": [{% for s in site.data.skills %}
+    { "group": {{ s.group | jsonify }}, "items": {{ s.items | jsonify }} }{% unless forloop.last %},{% endunless %}{% endfor %}
+  ]
+}
+</script>

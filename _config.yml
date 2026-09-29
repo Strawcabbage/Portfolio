@@ -15,10 +15,10 @@ baseurl: "/Portfolio"
 
 # Contact links. Leave a value empty ("") to hide it.
 contact:
-  email: ""          # e.g. you@wisc.edu
+  email: Jackson@hulitech.com
   github: Strawcabbage
   linkedin: jackson-hull-132966278
-  resume: ""         # e.g. /assets/resume.pdf (commit the PDF to assets/)
+  resume: /assets/resume.pdf
 
 markdown: kramdown
 kramdown:
@@ -26,6 +26,29 @@ kramdown:
 
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Case studies live in _case_studies/. Each starts with `published: false`;
+# flip it to true when the write-up is done and a "Case study" link appears on
+# the matching project card or Journey entry. Preview drafts locally with
+#   bundle exec jekyll serve --unpublished
+collections:
+  case_studies:
+    output: true
+    permalink: /case-studies/:name/
+
+# Social preview card (Open Graph / Twitter) used for every page unless a page
+# sets its own `image:` in front matter.
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/img/og-card.jpg
+social:
+  name: Jackson Hull
+  links:
+    - https://github.com/Strawcabbage
+    - https://www.linkedin.com/in/jackson-hull-132966278
 
 permalink: /writing/:year/:title/
 

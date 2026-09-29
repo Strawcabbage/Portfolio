@@ -31,6 +31,8 @@
       </details>
       {% endif %}
       <p class="project-links">
+        {% assign cs = site.case_studies | where: "project", p.title | first %}
+        {% if cs %}<a href="{{ cs.url | relative_url }}">Case study →</a>{% endif %}
         {% if p.demo %}<a href="{{ p.demo }}">Live demo →</a>{% endif %}
         {% if p.repo %}<a href="{{ p.repo }}">Source →</a>{% endif %}
         {% if p.note %}<span class="note">{{ p.note }}</span>{% endif %}
