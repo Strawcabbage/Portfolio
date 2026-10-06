@@ -15,17 +15,17 @@
 - title: Grokking on Modular Arithmetic
   summary: >-
     Reproduced grokking, where a network generalizes long after memorizing its
-    training set, with a transformer written from scratch in PyTorch.
-  metric: { value: "~190×", label: "more steps to generalize than to memorize" }
-  visual: grokking
+    training set, then ran a 27-run sweep to find out what controls it.
+  metric: { value: "∝ 1/λ", label: "time to grok scales inversely with weight decay (λ × steps ≈ 3,000)" }
+  visual: grokking-wd
   details:
-    - Multi-head causal self-attention, pre-norm blocks and a 2-layer
-      transformer built up from nn.Linear.
-    - Trained on (a + b) mod 97 with 30% of all pairs, AdamW, weight decay
-      0.1, for 100k steps.
-    - Training accuracy passes 99% by step 200; validation accuracy stays near
-      chance until it reaches 99% at step 38,200.
-  tags: [PyTorch, Transformers, Deep Learning Theory]
+    - A 2-layer transformer built from scratch in PyTorch, trained on (a + b) mod 97
+      with 30% of all pairs, full batch, using Power et al. (2022) settings.
+    - Weight decay sets the clock. Grokking took ~35.8k steps at λ = 0.1, 2.8k at
+      λ = 1 and 1.0k at λ = 3, and never happened without it (0/3 seeds in 100k steps).
+    - An 8× wider model grokked only ~1.5× sooner. The repeated post-grokking
+      accuracy collapses came with Adam's β2 = 0.999 and mostly vanished at 0.98 (2 seeds each).
+  tags: [PyTorch, Transformers, Training Dynamics]
   repo: https://github.com/Strawcabbage/grokking
 
 - title: Transformer Engine
