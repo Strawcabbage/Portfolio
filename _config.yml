@@ -59,6 +59,7 @@ permalink: /writing/:year/:title/
 
 exclude:
   - README.md
+  - scripts
   - Gemfile
   - Gemfile.lock
   - vendor

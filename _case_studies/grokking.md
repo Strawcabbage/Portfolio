@@ -4,7 +4,7 @@ published: false
 title: Grokking on Modular Arithmetic
 project: Grokking on Modular Arithmetic
 summary: Reproducing delayed generalization with a transformer written from scratch.
-visual: grokking
+visual: grokking-wd
 facts:
   - { label: Role, value: Solo project }
   - { label: Stack, value: "PyTorch, Python" }
